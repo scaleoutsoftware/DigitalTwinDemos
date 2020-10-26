@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group 'com.scaleoutsoftware.demo'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.scaleoutsoftware.com/repository/external/"
+    }
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.scaleoutsoftware.digitaltwin', name: 'mock', version: '1.2.5'
+    compile group: 'com.scaleoutsoftware.digitaltwin', name: 'core', version: '1.2.5'
+}
+
+
