@@ -91,13 +91,6 @@ public class StatusTrackerMessageProcessor extends MessageProcessor<StatusTracke
                     digitalTwin.setStatusTrackerCondition(msg.getNodeCondition());
                 }
 
-                // the message indicates a moderate incident
-                else if(msg.moderateIncident()) {
-                    digitalTwin.setAlertLevel(Constants.INFRASTRUCTURE_MODERATE_ALERTLEVEL, Constants.CONTROLLER_MODERATE_ALERTLEVEL);
-                    digitalTwin.incrementModerateEventCount();
-                    digitalTwin.setStatusTrackerCondition(msg.getNodeCondition());
-                }
-
                 // the message indicates a severe incident
                 else if(msg.severeIncident()) {
                     digitalTwin.setAlertLevel(Constants.INFRASTRUCTURE_SEVERE_ALERTLEVEL, Constants.CONTROLLER_SEVERE_ALERTLEVEL);
