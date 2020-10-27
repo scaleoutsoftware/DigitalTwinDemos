@@ -1,0 +1,575 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScaleOut.Streaming.DigitalTwin.Mock</name>
+    </assembly>
+    <members>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint">
+            <summary>
+            This class is used for sending messages to digital twin objects.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.#ctor">
+            <summary>
+            Public constructor.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Send(System.String,System.String,System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends JSON serialized messages to a digital twin object.
+            </summary>
+            <param name="digitalTwinModel">The target digital twin model type.</param>
+            <param name="digitalTwinId">Digital twin identifier.</param>
+            <param name="messages">The list of serialized JSON encoded messages to send.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled"/> when message was successfully sent,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Receive(System.String,System.String)">
+            <summary>
+            Reads JSON serialized messages the specified digital twin object sent to a data source.
+            </summary>
+            <param name="digitalTwinModel">The digital twin model type.</param>
+            <param name="digitalTwinId">The digital twin identifier as a source of the messages.</param>
+            <returns>The list of messages as <see cref="T:System.Collections.Generic.IEnumerable`1"/> sent to a data source by
+            the digital twin instance <paramref name="digitalTwinId"/>.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.AckReceivedMessages(System.String,System.String)">
+            <summary>
+            Acknowledges the reception of messages retrieved earlier by the end user via the 
+            <see cref="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Receive(System.String,System.String)"/> method call. These messages are originated and sent 
+            to a data source by real-time digital twins. All earlier retrieved messages will be marked by the mock runtime 
+            as delivered and then will be removed from internal message queue.
+            </summary>
+            <param name="digitalTwinModel">The digital twin model type.</param>
+            <param name="digitalTwinId">The digital twin identifier as a source of the messages.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Send(System.String,System.String,System.Byte[])">
+            <summary>
+            Sends a serialized message to a digital twin object.
+            </summary>
+            <param name="digitalTwinModel">The target digital twin model type.</param>
+            <param name="digitalTwinId">The target digital twin identifier.</param>
+            <param name="message">Serialized JSON encoded message to send.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled"/> when message was successfully sent,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Send(System.String,System.String,System.String)">
+            <summary>
+            Sends a serialized message to a digital twin object.
+            </summary>
+            <param name="digitalTwinModel">The target digital twin model type.</param>
+            <param name="digitalTwinId">The target digital twin identifier.</param>
+            <param name="message">Serialized JSON encoded message to send.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled"/> when message was successfully sent,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder">
+            <summary>
+            Provides a way to build a digital twin mock execution environment and manage the registration of 
+            user-defined digital twin models with the ScaleOut Mock API runtime.
+            </summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.MockGridCollection">
+            <summary>Contains the list of loaded models with the corresponding <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid"/> instances
+            The key is digital twin model, the value is <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid"/> instance.</summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.LoggedMessages">
+            <summary>Contains the list of logging messages recorded by all twin instances at runtime. If the <see cref="T:Microsoft.Extensions.Logging.ILogger"/>
+            interface is also available at runtime, then these messages will be also logged via the specified logger.</summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.MockEnvironmentIGName">
+            <summary>Pseudo-IG name for the Mock environment.</summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.MockEnvironmentIGId">
+            <summary>Pseudo-IG Id for the Mock environment.</summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.#ctor">
+            <summary>
+            Constructor.
+            </summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.LoggerFactory">
+            <summary>
+            Gets the <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to be used by the <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> class for logging.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.SetLoggerFactory(Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Sets an <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> to be used by the <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> class for logging.
+            </summary>
+            <param name="loggerFactory">An <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> instance.</param>
+            <returns>The same instance of <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> that can be used to further configure 
+            digital twin mock execution environment.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.AddDigitalTwin``3(System.String)">
+            <summary>
+            Registers a user-defined digital twin and message processor class with the ScaleOut digital twin mock runtime.
+            </summary>
+            <typeparam name="TDigitalTwin">User-defined digital twin object type.</typeparam>
+            <typeparam name="TMessageProcessor">User-defined digital twin message processor type.</typeparam>
+            <typeparam name="TMessage">User-defined message type to be processed by digital twin objects.</typeparam>
+            <param name="digitalTwinModel">Name of the digital twin model.</param>
+            <returns>The same instance of <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> that can be used to further configure this
+            digital twin mock execution environment.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.AddDigitalTwin(System.String,System.Byte[])">
+            <summary>
+            Registers a user-defined digital twin and message processor class with the mock runtime using a JSON
+            configuration document.
+            </summary>
+            <remarks>
+            Expected structure of the digital twin model's JSON configuration file:
+            <code language="JSON">
+            {
+               "assemblyName": "MyClass.MyTwinModel.dll",
+               "modelType": "MyNamespace.MyTwinModel",
+               "messageProcessorType": "MyNamespace.MyTwinModelMessageProcessor",
+               "messageType": "MyNamespace.MyTwinModelMessage"
+            }
+            </code>
+            </remarks>
+            <param name="digitalTwinModel">Name of the digital twin model.</param>
+            <param name="digitalTwinConfiguration">Contents of a UTF8-encoded JSON file that describes the digital twin model configuration.</param>
+            <returns>The same instance of <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> that can be used to further configure this
+            digital twin mock execution environment.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.AddDigitalTwin(System.String,System.String)">
+            <summary>
+            Registers a user-defined digital twin and message processor class with the mock runtime using a JSON
+            configuration file.
+            </summary>
+            <remarks>
+            Expected structure of the digital twin model's JSON configuration file:
+            <code language="JSON">
+            {
+               "assemblyName": "MyClass.MyTwinModel.dll",
+               "modelType": "MyNamespace.MyTwinModel",
+               "messageProcessorType": "MyNamespace.MyTwinModelMessageProcessor",
+               "messageType": "MyNamespace.MyTwinModelMessage"
+            }
+            </code>
+            </remarks>
+            <param name="digitalTwinModel">Name of the digital twin model.</param>
+            <param name="pathToDigitalTwinConfigFile">The path to the digital twin configuration file that describes the digital twin model.</param>
+            <returns>The same instance of <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> that can be used to further configure this
+            digital twin mock execution environment.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.BuildAsync">
+            <summary>
+            Loads and initializes all registered digital twin objects to process incoming messages.
+            </summary>
+            <returns><see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment"/> used to manage the lifetime of the loaded digital twin models.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.BuildModelPropertyInfo(System.String)">
+            <summary>
+            Returns a dictionary of entries describing the
+            public properties and fields on a digital twin model class.
+            </summary>
+            <returns>
+            Dictionary where the keys are the class's field/property names
+            and the values are either "string" or "number".
+            </returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.LoadDigitalTwinAsync(System.String,System.Collections.Generic.List{System.String},System.Type,System.Type,System.Type,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Internal static method that loads digital twin object into the store.
+            </summary>
+            <param name="digitalTwinModel">Digital twin model type.</param>
+            <param name="userAssemblyPaths">List of user-specified assembly locations.</param>
+            <param name="digitalTwinClassType">User-defined digital twin object type.</param>
+            <param name="messageProcessorType">User-defined digital twin message processor type.</param>
+            <param name="messageType">User-defined message type to be processed by digital twin objects.</param>
+            <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instance.</param>
+            <returns>ScaleOut Invocation Grid object.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder.Validate(System.Type,System.Type,System.Type)">
+            <summary>
+            The validate method ensures a digital twin model configuration can be successfully instantiated. 
+            </summary>
+            <param name="dtType">the type of the digital twin to validate</param>
+            <param name="mpType">the type of the message processor to validate</param>
+            <param name="msgType">the type of the message to validate</param>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid.DigitalTwinModel">
+            <summary>Name of the hosting digital twin model.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid.IgName">
+            <summary>Name of the MockInvocationGrid instance.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid.MockMessageObserver">
+            <summary>The corresponding message observer.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid.IsLoaded">
+            <summary>Indicates whether the model is loaded and live.</summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid.DataSourceTargetedMessages">
+            <summary>The dictionary contains messages sent by twin instances to the MockEnvironment 
+            as a data source. The key is the twin instance Id, the value is twin's message.</summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid._synchObj">
+            <summary>The sync object.</summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockInvocationGrid.Unload(System.Boolean)">
+            <summary>Unloads the model.</summary>
+            <param name="removeInstances">Indicates whether we should remove all twin instances associated with this model.</param>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment">
+            <summary>
+            The MockEnvironment class tracks loaded digital twin models and
+            can load new digital twin models or shutdown running models.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.#ctor(System.Collections.Generic.List{System.String},Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Internal constructor.
+            </summary>
+            <param name="addedModels">The list of models added via <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentBuilder"/> class.</param>
+            <param name="logger">The <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instance.</param>/// 
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.AddDigitalTwinAsync``3(System.String,System.String)">
+            <summary>
+            Registers and loads a new digital twin model. After this call, digital twin objects are ready
+            to process incoming messages.
+            </summary>
+            <typeparam name="TDigitalTwin">User-defined digital twin object type.</typeparam>
+            <typeparam name="TMessageProcessor">User-defined digital twin message processor type.</typeparam>
+            <typeparam name="TMessage">User-defined message type to be processed by digital twin objects.</typeparam>
+            <param name="digitalTwinModel">Name of the digital twin model.</param>
+            <param name="userAssemblyPath">Path to the user-defined assembly containing the typed digital twin classes.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.ShutdownAsync">
+            <summary>
+            Shuts down all running digital twin models.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.ShutdownAsync(System.String)">
+            <summary>
+            Shuts down a specified digital twin model.
+            </summary>
+            <param name="digitalTwinModel">Digital twin model name.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.GenerateModelSchema(System.String)">
+            <summary>
+            Generates a JSON schema file for the specified <paramref name="digitalTwinModel"/>.
+            </summary>
+            <param name="digitalTwinModel">The digital twin model name.</param>
+            <returns>A JSON schema for the digital twin model, returned as a string.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.CreateModelSchemaFile(System.String,System.String)">
+            <summary>
+            Creates a model-related schema file for the specified <paramref name="digitalTwinModel"/>. When the 
+            <paramref name="outputDirectory"/> is null or empty, the method creates the schema file in the current directory.
+            The name of the created file consists of the digital twin model name with a .json file extension.
+            </summary>
+            <param name="digitalTwinModel">The specified digital twin model name.</param>
+            <param name="outputDirectory">The output directory where the schema file needs to be written.</param>
+            <returns>An absolute path to the created digital twin model related schema file.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.DeleteDigitalTwinModel(System.String,System.Boolean)">
+            <summary>
+            Deletes the specified digital twin model, optionally removing all digital twin objects.
+            </summary>
+            <param name="digitalTwinModel">Digital twin model name.</param>
+            <param name="removeInstances">Indicates whether all twin instances associated with the model should be removed as well.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.GetLoggedMessages(System.Nullable{System.DateTime})">
+            <summary>
+            Retrieves the messages logged by digital twin instances for all loaded models. If the specified timestamp is null, 
+            all messages are returned, otherwise messages logged after the specified timestamp will be logged. If no messages exist 
+            after the timestamp, the returned list will be empty.
+            </summary>
+            <param name="timestamp">Minimum timestamp (exclusive) for logged messages.</param>
+            <returns>The list of logged messages.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.GetAllLoggedMessages">
+            <summary>
+            Retrieves all messages logged by digital twin instances for all loaded models.
+            </summary>
+            <returns>The list of all logged messages.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironment.GetInstances(System.String)">
+            <summary>
+            Retrieves all digital twin instances for the specified <paramref name="digitalTwinModel"/>.
+            </summary>
+            <returns>The dictionary of all digital twin instances of a model type <paramref name="digitalTwinModel"/>,
+            where the key is an instance Id and the value is a reference to the corresponding twin instance.</returns>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentException">
+            <summary>
+            The exception that is thrown when an mock environment related error occurs at the runtime.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentException.#ctor">
+            <summary>
+            Parameterless constructor.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentException.#ctor(System.String)">
+            <summary>
+            The MockEnvironmentException constructor with a message.
+            </summary>
+            <param name="message">The message associated with this exception.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEnvironmentException.#ctor(System.String,System.Exception)">
+            <summary>
+            The MockEnvironmentException constructor with a message and an inner exception.
+            </summary>
+            <param name="message">The message associated with this exception.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageListFactory.#ctor">
+            <summary>
+            Public parameterless constructor.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageListFactory.#ctor(System.String)">
+            <summary>
+            Public constructor.
+            </summary>
+            <param name="incomingMessageListAsJson">List of new messages in JSON format.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageListFactory.GetIncomingMessageList``1">
+            <summary>
+            Returns a collection of new (incoming) messages as
+            <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <typeparam name="TMessage">User defined message/event class type.</typeparam>
+            <returns>Collection of new messages to process.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageObserver.Configure(System.String,Scaleout.Streaming.DigitalTwin.Common.DigitalTwinMetadata,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Prepares the message observer class for processing.
+            </summary>
+            <param name="targetNamespace">Digital twin model name as the target namespace for the in-memory cache.</param>
+            <param name="dtMetadata">Digital twin model metadata.</param>
+            <param name="logger">(Optional) the specified logger.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageObserver.MessageHandler(Scaleout.Streaming.DigitalTwin.Common.EventInfoParameter,System.Byte[])">
+            <summary>
+            Process incoming events for the specified digital twin object.
+            </summary>
+            <param name="param">Instance of <see cref="T:Scaleout.Streaming.DigitalTwin.Common.EventInfoParameter"/> as the context of the incoming messages.</param>
+            <param name="messages">Incoming messages to process.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageObserver.RetrieveObject(System.String,System.UInt32,System.Type)">
+            <summary>
+            The helper method for reading a digital twin wrapper object from in-memory collection or creating a new instance if it does not exist.
+            </summary>
+            <param name="dataSourceId">Data source unique identifier (e.g. IoT device Id); used as an instance key.</param>
+            <param name="sourceAppId">The appId for a source namespace (the same as source namespace AppId) that is used here
+            for posting messages back to their origination point (e.g. IoT devices).</param>
+            <param name="dtType">User defined type of digital twin object.</param>
+            <returns>Retrieved object as the <see cref="T:Scaleout.Streaming.DigitalTwin.Common.DigitalTwinWrapper"/> type.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageObserver.RetrieveAllObjects">
+            <summary>
+            The helper method for getting the list of all wrapper objects from in-memory collection.
+            </summary>
+            <returns>Retrieve the list of all stored twin instances.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageObserver.Cleanup(System.Boolean)">
+            <summary>
+            Clears the state of the class.
+            </summary>
+            <param name="removeInstances">Indicates whether we should remove all twin instances associated with this model.</param>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender">
+            <summary>
+            This class is used by the mock digital twin library for sending
+            messages to digital twin objects.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new message sender from a given source namespace to a specified target namespace. 
+            </summary>
+            <param name="targetNamespace">The namespace where messages are sent to.</param>
+            <param name="sourceNamespace">The namespace where messages are sent from.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender.#ctor(System.UInt32,System.String,System.String)">
+            <summary>
+            Initializes <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender"/> and passes the application Id of target namespace for sending messages.
+            </summary>
+            <param name="targetGridId">The AppId of ScaleOut namespace where messages will be sent to.</param>
+            <param name="targetNamespace">The namespace where messages are sent to.</param>
+            <param name="sourceNamespace">The namespace where messages are sent from.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender.#ctor(System.UInt32,System.String)">
+            <summary>
+            Initializes <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender"/> and passes the invocation grid Id associated 
+            with the target namespace for sending messages.
+            </summary>
+            <param name="targetGridId">The Invocation Grid Id for ScaleOut namespace where messages will be sent to.</param>
+            <param name="sourceNamespace">The namespace where messages are sent from.</param>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender.SourceAppId">
+            <summary>
+            Application namespace used to identify the message source (i.e., a data source connector or a digital twin object).
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageSender.Send(System.String,System.String,System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends serialized messages to a digital twin object located in the data grid or
+            device the digital twin represents.
+            </summary>
+            <param name="digitalTwinId">Digital twin identifier.</param>
+            <param name="messageInfo">JSON-based message info that includes device Id, target and source digital twin model types.</param>
+            <param name="messages">The list of serialized JSON encoded event messages to send.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled"/> when message was successfully sent,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.ActionBlockWorker">
+            <summary>
+            The wrapper class around TPL's ActionBlock component for sending
+            messages from MessageObserver in a non-blocking async manner.
+            </summary>
+        </member>
+        <member name="F:ScaleOut.Streaming.DigitalTwin.Mock.ActionBlockWorker._numberRetries">
+            <summary>
+            NB: We should be using logging to monitor this parameter. It's possible to post
+            the message after multiple attempts when the ActionBlock's queue is full, 
+            but still, it should be a rare case we need to watch for to fine-tune this communication channel.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.ActionBlockWorker.#ctor(System.Func{ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper,Scaleout.Streaming.DigitalTwin.Core.SendingResult})">
+            <summary>
+            Public constructor.
+            </summary>
+            <param name="sender">Delegate function for sending the message.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.ActionBlockWorker.Post(ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper)">
+            <summary>Posts user message(s) to the specified target within 
+            the <see cref="T:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper"/> data block.</summary>
+            <param name="data">Data block to post.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.ActionBlockWorker.Wait">
+            <summary>
+            Signals to the dataflow block that it shouldn't accept or produce any more messages 
+            and shouldn't consume any more postponed messages. Method then wait until all queued messages
+            are processed and sent off.
+            </summary>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper">
+            <summary>
+            The user messages packed with delivery information. Messages need to be sent 
+            from within a digital twin either to other twin or to twin's data source (physical device).
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.#ctor">
+            <summary>Public constructor.</summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.#ctor(System.UInt32,System.String,System.String,System.String,System.Collections.Generic.List{System.Byte[]})">
+            <summary>
+            Public constructor with the data members as parameters.
+            </summary>
+            <param name="targetInvocationGridId">The target invocation grid Id.</param>
+            <param name="targetTwinModel">The target digital twin's model.</param>
+            <param name="sourceTwinModel">The source digital twin's model.</param> 
+            <param name="targetTwinOrDeviceId">The unique identifier of target twin or device.</param>
+            <param name="messages">The user messages to send serialized as array of bytes.</param>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.TargetInvocationGridId">
+            <summary>The target invocation grid Id.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.TargetTwinModel">
+            <summary>The target digital twin's model.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.SourceTwinModel">
+            <summary>The source digital twin's model.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.TargetTwinOrDeviceId">
+            <summary>The unique identifier of target twin or device.</summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper.Messages">
+            <summary>The user messages to send serialized as array of bytes.</summary>
+        </member>
+        <member name="T:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext">
+            <summary>
+            Implementation of <see cref="T:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext"/> abstract class.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.#ctor(System.String,System.String,System.UInt32,Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Public constructor.
+            </summary>
+            <param name="dataSourceId">ScaleOut application Id where user messages are get posted to the grid.
+            Typically it is AppId of Connector IG which listens on user messages from event source like Azure IoT Hub, Kafka, etc.</param>
+            <param name="digitalTwinModel">The user's digital twin model ("car" vs. "windturbine"), etc.</param>
+            <param name="dataSourceAppId">Unique identifier of a message data source (device Id) that is modeled by a digital twin.</param>
+            <param name="logger">(Optional) the specified logger.</param>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.DataSourceId">
+            <summary>
+            Data source unique identifier, e.g. for IoT use case it is typically device Id.
+            </summary>
+        </member>
+        <member name="P:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.DigitalTwinModel">
+            <summary>
+            Digital twin model type.
+            </summary>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.SendToDataSource(System.Byte[])">
+            <summary>
+            Sends message back to a data source origination point (typically it is an IoT device).
+            In the context of the mock API, all messages will be store in memory so the calling program
+            or unit test method can later retrieve them via the <see cref="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Receive(System.String,System.String)"/> 
+            method call.
+            </summary>
+            <param name="message">JSON encoded message as <see cref="T:byte[]"/>.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when message was successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.SendToDataSource(System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends a list of messages back to a data source origination point (typically it is an IoT device).
+            In the context of the mock API, all messages will be store in memory so the calling program
+            or unit test method can later retrieve them via the <see cref="M:ScaleOut.Streaming.DigitalTwin.Mock.MockEndpoint.Receive(System.String,System.String)"/> 
+            method call.
+            </summary>
+            <param name="messages">JSON encoded messages as <see cref="T:IEnumerable{byte[]}"/>.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when messages were successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.SendToTwin(System.String,System.String,System.Byte[])">
+            <summary>
+            Sends message to a different digital twin in twin's hierarchy.
+            </summary>
+            <param name="targetTwinModel">Digital twin model type.</param>
+            <param name="targetTwinId">Digital twin identifier.</param>
+            <param name="message">JSON encoded message as <see cref="T:byte[]" />.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when message was successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.SendToTwin(System.String,System.String,System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends a list of messages to a different digital twin in twin's hierarchy.
+            </summary>
+            <param name="targetTwinModel">Digital twin model type.</param>
+            <param name="targetTwinId">Digital twin identifier.</param>
+            <param name="messages">JSON encoded messages as a list of <see cref="T:byte[]" />.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when messages were successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.LogMessage(Scaleout.Streaming.DigitalTwin.Core.LogSeverity,System.String)">
+            <summary>
+            Logs user message with the specified severity level.
+            </summary>
+            <param name="severity">The severity level for the specified message.</param>
+            <param name="message">The user message to log.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.ValidateMsgs(System.Collections.Generic.List{System.Byte[]})">
+            <summary>
+            Validates user messages before sending them out to the mock environment target.
+            </summary>
+            <param name="messages">The list of user messages to validate.</param>
+        </member>
+        <member name="M:ScaleOut.Streaming.DigitalTwin.Mock.MockProcessingContext.SendMsgTo(ScaleOut.Streaming.DigitalTwin.Mock.MockMessageWrapper)">
+            <summary>
+            Sends messages either to another digital twin in the hierarchy or to the mock environment data source related buffer.
+            </summary>
+            <param name="messageWrapper">The DTO object for sending the messages.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled"/> when message was successfully sent,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+    </members>
+</doc>

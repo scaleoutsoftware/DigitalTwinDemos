@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>ScaleOut Software, Inc.</Company>
+    <Product>ScaleOut Digital Twin Builder™ .NET Library for ScaleOut StreamServer®</Product>
+    <Authors>ScaleOut Software, Inc.</Authors>
+    <PackageProjectUrl>https://www.scaleoutsoftware.com/products/streamserver</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/scaleoutsoftware/Scaleout.Streaming.Net</RepositoryUrl>
+    <Copyright>Copyright © 2020 by ScaleOut Software, Inc.</Copyright>
+    <PackageId>GasMeterTwin sample</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Scaleout.Streaming.DigitalTwin.Core" Version="1.6.0" />
+  </ItemGroup>
+
+</Project>

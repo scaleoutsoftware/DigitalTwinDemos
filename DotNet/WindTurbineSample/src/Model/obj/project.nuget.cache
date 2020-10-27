@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "meNIBJ6Gxu3VPw3iFLhMWfpTAfsLh8cP3voCe0IoFR+u+5f3+8GhCBvCROuWLYO0fnyDomgdBPga1TjoxU+PfA==",
+  "success": true,
+  "projectFilePath": "C:\\Git\\Scaleout\\DigitalTwinDemos\\DotNet\\WindTurbineSample\\src\\Model\\ScaleOut.Streaming.DigitalTwin.Samples.WindTurbine.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\olegs\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
+    "C:\\Users\\olegs\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512",
+    "C:\\Users\\olegs\\.nuget\\packages\\scaleout.streaming.digitaltwin.core\\1.6.0\\scaleout.streaming.digitaltwin.core.1.6.0.nupkg.sha512",
+    "C:\\Users\\olegs\\.nuget\\packages\\scaleout.streaming.timewindowing\\1.0.2\\scaleout.streaming.timewindowing.1.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

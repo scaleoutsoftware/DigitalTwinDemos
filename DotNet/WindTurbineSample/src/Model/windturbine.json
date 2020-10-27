@@ -1,0 +1,6 @@
+{
+	"assemblyName": "ScaleOut.Streaming.DigitalTwin.Samples.WindTurbine.dll",
+	"modelType": "Scaleout.Streaming.DigitalTwin.Samples.WindTurbine.WindTurbineDigitalTwin",
+	"messageProcessorType": "Scaleout.Streaming.DigitalTwin.Samples.WindTurbine.WindTurbineMessageProcessor",
+	"messageType": "Scaleout.Streaming.DigitalTwin.Samples.WindTurbine.DeviceTelemetry"
+}

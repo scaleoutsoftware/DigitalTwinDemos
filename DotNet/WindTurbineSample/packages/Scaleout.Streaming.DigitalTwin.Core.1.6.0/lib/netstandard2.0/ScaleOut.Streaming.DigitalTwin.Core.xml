@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ScaleOut.Streaming.DigitalTwin.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase">
+            <summary>
+            All digital twin objects must be subclassed from this <see cref="T:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase"/> 
+            abstract base class to be integrated into the ScaleOut StreamServer message processing pipeline.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.Id">
+            <summary>
+            Unique digital twin identifier.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.Model">
+            <summary>
+            Digital twin model type (e.g. "WindTurbine", "TemperatureSensor").
+            </summary>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.Init(System.String,System.String)">
+            <summary>
+            Allows to add a digital twin specific initialization logic which will be
+            called once at the object creation time.
+            </summary>
+            <param name="id">Digital twin identifier.</param>
+            <param name="model">Digital twin model type.</param>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.InitAsync(System.String,System.String)">
+            <summary>
+            Allows to add a digital twin specific initialization logic which will be
+            called once at the object creation time (async version).
+            </summary>
+            <param name="id">Digital twin identifier.</param>
+            <param name="model">Digital twin model type.</param>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.InitInternal(System.String,System.String)">
+            <summary>
+            Initializes <see cref="P:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.Id"/> and <see cref="P:Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase.Model"/>
+            properties at the time of object creation.
+            </summary>
+            <param name="id">Digital twin identifier.</param>
+            <param name="model">Digital twin model type.</param>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult">
+            <summary>
+            When a digital twin object receives a message from external data source,
+            ScaleOut StreamServer passes it via a user-defined <see cref="M:Scaleout.Streaming.DigitalTwin.Core.MessageProcessor.ProcessMessages(Scaleout.Streaming.DigitalTwin.Core.ProcessingContext,Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase,Scaleout.Streaming.DigitalTwin.Core.IMessageListFactory)"/>
+            method, which must return one of these values: <see cref="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.DoUpdate"/> is 
+            returned when a digital twin object needs to be updated and saved, otherwise method
+            should return <see cref="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.NoUpdate"/> value.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.DoUpdate">
+            <summary>
+            The digital twin object has been modified and must be updated in the data grid.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.NoUpdate">
+            <summary>
+            The digital twin object was not modified and does not need to be updated in the data grid.
+            </summary>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.SendingResult">
+            <summary>
+            Indicates the status of a <see cref="M:Scaleout.Streaming.DigitalTwin.Core.IMessageSender.Send(System.String,System.String,System.Collections.Generic.IEnumerable{System.Byte[]})"/> operation when sending messages to or from a digital twin object.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled">
+            <summary>
+            The messages were sent and processed successfully.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled">
+            <summary>
+            An error occurred while sending or processing messages by a digital twin object or data source.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued">
+            <summary>
+            The messages were successfully enqueued for delivery.
+            </summary>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.LogSeverity">
+            <summary>
+            Defines the severity levels for logging messages.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.LogSeverity.Verbose">
+            <summary>
+            Used for logging of lengthy messages.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.LogSeverity.Informational">
+            <summary>
+            Indicates that log messages with that level have informational purpose.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.LogSeverity.Warning">
+            <summary>
+            Indicates that log messages with that level are application warnings.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.LogSeverity.Error">
+            <summary>
+            Indicates that log messages with that level should be treated as an application error.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.LogSeverity.Critical">
+            <summary>
+            The message corresponds to a critical error that has caused a major failure that 
+            requires immediate attention.
+            </summary>
+        </member>
+        <member name="F:Scaleout.Streaming.DigitalTwin.Core.LogSeverity.None">
+            <summary>
+            Indicates that log messages with that level should not be stored (e.g. temporarily 
+            based on some digital twin configuration setting).
+            </summary>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.IMessageListFactory">
+            <summary>
+            Creates collection of new messages received by a digital twin object.
+            </summary>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.IMessageListFactory.GetIncomingMessageList``1">
+            <summary>
+            Returns an enumerable collection of new (incoming) messages as
+            <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <typeparam name="TMessage">User defined message/event class type.</typeparam>
+            <returns>Collection of new messages to process.</returns>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.IMessageSender">
+            <summary>
+            Interface that must be implemented by a message sender class for sending
+            messages/events to a digital twin.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.IMessageSender.SourceAppId">
+            <summary>
+            Application namespace used to identify the message source (i.e., a data source connector or a digital twin object).
+            </summary>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.IMessageSender.Send(System.String,System.String,System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends serialized messages to a digital twin object located in the data grid or
+            IoT device that a digital twin represents.
+            </summary>
+            <param name="digitalTwinId">Digital twin identifier.</param>
+            <param name="messageInfo">JSON-encoded message info specifying the data source Id, target, and source digital twin model types.</param>
+            <param name="messages">The list of serialized JSON-encoded event messages to send.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Handled"/> when message was successfully sent,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.MessageProcessor`2">
+            <summary>
+            Abstract base class that must be subclassed to implement the message processor which
+            processes incoming messages for a digital twin object.
+            </summary>
+            <typeparam name="TDigitalTwin">User-defined type for a digital twin object.</typeparam>
+            <typeparam name="TMessage">User-defined type for incoming messages.</typeparam>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.MessageProcessor`2.ProcessMessages(Scaleout.Streaming.DigitalTwin.Core.ProcessingContext,`0,System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            This method is called by ScaleOut StreamServer to pass new messages
+            to the specified digital twin object.
+            </summary>
+            <param name="context">The digital twin message processing context.</param>
+            <param name="digitalTwin">The target digital twin object.</param>
+            <param name="newMessages">New messages to process.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.DoUpdate"/> when the digital twin
+            object and the list of processed messages need to be updated and <see cref="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.NoUpdate"/> when
+            no updates are needed.</returns>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.MessageProcessor`2.ProcessMessages(Scaleout.Streaming.DigitalTwin.Core.ProcessingContext,Scaleout.Streaming.DigitalTwin.Core.DigitalTwinBase,Scaleout.Streaming.DigitalTwin.Core.IMessageListFactory)">
+            <summary>
+            Internal method called by ScaleOut Digital Twin library for passing 
+            the digital twin (state) object together with lists of processed and new messages
+            (type of <typeref name="TMessage"/>) into a user-defined message processor class.
+            </summary>
+            <param name="context">The digital twin message processing context.</param>
+            <param name="digitalTwin">The target digital twin object.</param>
+            <param name="messageListFactory">The message list factory which generates message lists of a user-defined type.
+            <typeref name="TMessage"/>.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.DoUpdate"/> when digital twin
+            object and the list of processed messages need to be updated and <see cref="F:Scaleout.Streaming.DigitalTwin.Core.ProcessingResult.NoUpdate"/> when
+            no updates are needed.</returns>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.MessageProcessor">
+            <summary>
+            The top level abstract base class used by ScaleOut Digital Twin Library.
+            </summary>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.ModelSchema">
+            <summary>
+            This class defines the structure of the model.json file that
+            needs to be included into a zip file before uploading the model to
+            the Digital Twin Builder cloud service.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.ModelSchema.AssemblyName">
+            <summary>
+            The name of the file assembly that contains digital twin model, message processor and message classes defined.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.ModelSchema.ModelType">
+            <summary>
+            The .NET type as the name of the digital twin model class. The value must include the namespace.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.ModelSchema.MessageProcessorType">
+            <summary>
+            The .NET type as the name for the message processor class. The value must include the namespace.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.ModelSchema.messageType">
+            <summary>
+            The .NET type as the name for the message class. The value must include the namespace.
+            </summary>
+        </member>
+        <member name="T:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext">
+            <summary>
+            Message processing context for currently processing messages.
+            It allows sending messages back to a data source where the messages 
+            are originated from.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.DataSourceId">
+            <summary>
+            Data source unique identifier, e.g. for IoT use case it is typically device Id.
+            </summary>
+        </member>
+        <member name="P:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.DigitalTwinModel">
+            <summary>
+            Digital twin model type.
+            </summary>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.SendToDataSource(System.Byte[])">
+            <summary>
+            Sends message back to a data source origination point (e.g. IoT device). When sending 
+            a message to the ScaleOut Messaging REST service as a data source, the message content
+            must be JSON encoded.
+            </summary>
+            <param name="message">JSON encoded message as <see cref="T:byte[]" />.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when message was successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.SendToDataSource(System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends a list of messages back to a data source origination point (e.g. IoT device).
+            When sending messages to the ScaleOut Messaging REST service as a data source, each message
+            must be JSON encoded.
+            </summary>
+            <param name="messages">JSON encoded messages as a list of <see cref="T:byte[]" />.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when messages were successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.SendToTwin(System.String,System.String,System.Byte[])">
+            <summary>
+            Sends message to a different digital twin in twin's hierarchy.
+            </summary>
+            <param name="targetTwinModel">Digital twin model type.</param>
+            <param name="targetTwinId">Digital twin identifier.</param>
+            <param name="message">JSON encoded message as <see cref="T:byte[]" />.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when message was successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.SendToTwin(System.String,System.String,System.Collections.Generic.IEnumerable{System.Byte[]})">
+            <summary>
+            Sends a list of messages to a different digital twin in twin's hierarchy.
+            </summary>
+            <param name="targetTwinModel">Digital twin model type.</param>
+            <param name="targetTwinId">Digital twin identifier.</param>
+            <param name="messages">JSON encoded messages as a list of <see cref="T:byte[]" />.</param>
+            <returns><see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.Enqueued"/> when messages were successfully enqueued,
+            <see cref="F:Scaleout.Streaming.DigitalTwin.Core.SendingResult.NotHandled"/> otherwise.</returns>
+        </member>
+        <member name="M:Scaleout.Streaming.DigitalTwin.Core.ProcessingContext.LogMessage(Scaleout.Streaming.DigitalTwin.Core.LogSeverity,System.String)">
+            <summary>
+            Logs user message with the specified severity level.
+            </summary>
+            <param name="severity">The severity level for the specified message.</param>
+            <param name="message">The user message to log.</param>
+        </member>
+    </members>
+</doc>
