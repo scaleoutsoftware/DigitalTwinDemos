@@ -61,7 +61,7 @@ public class StatusTrackerMessageProcessor extends MessageProcessor<StatusTracke
                 // this is an initialization message so we set our status and return.
                 if(msg.initMessage()) {
                     digitalTwin.setStatusTrackerType(msg.getNodeType());
-                    digitalTwin.setStatusTrackerCondition(Constants.NODE_CONDITION_NORMAL);
+                    digitalTwin.setStatusTrackerCondition(msg.getNodeCondition());
                     digitalTwin.setRegion(msg.getRegion(), msg.getLongitude(), msg.getLatitude());
                     return ProcessingResult.UpdateDigitalTwin;
                 }
