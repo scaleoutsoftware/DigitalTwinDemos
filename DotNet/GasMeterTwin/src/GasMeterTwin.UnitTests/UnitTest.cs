@@ -24,7 +24,10 @@
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
 using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Newtonsoft.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -64,6 +67,48 @@ namespace GasMeterTwin.UnitTests
 
 			// Retrieve an instance from the returned collection:
 			modelInstances.TryGetValue("gasmeter_123", out DigitalTwinBase instance);
+
+			await mockEnvironment.ShutdownAsync();
+		}
+
+		[TestMethod]
+		public async Task SendTwoMessagesWithTimestampsMoreThan15MinutesApart()
+		{
+			MockEnvironmentBuilder builder =
+				new MockEnvironmentBuilder()
+					.AddDigitalTwin<GasSensor, GasSensorTwinMessageProcessor, Message>(digitalTwinModel: "gasmeter");
+
+			var mockEnvironment = await builder.BuildAsync();
+
+			// Create a list of two messages
+			var msgsBytes = new List<byte[]>() { 
+					Encoding.UTF8.GetBytes(
+						JsonConvert.SerializeObject(new Message { PPMReading = 55, Timestamp = DateTime.Now })),
+					Encoding.UTF8.GetBytes(
+						JsonConvert.SerializeObject(new Message { PPMReading = 90, Timestamp = DateTime.Now.AddMinutes(20) }))};
+
+			// Send the list of "toxic" messages to the real-time twin instance to trigger the alert
+			SendingResult result = MockEndpoint.Send("gasmeter", "gasmeter_123", msgsBytes);
+			if (result == SendingResult.Handled)
+				Console.WriteLine("The message was processed by digital twin instance 'gasmeter_123'");
+			else // SendingResult.NotHandled
+				Console.WriteLine("The message was not handled and no digital twin was created.");
+
+			// The alert condition that was triggered by two "toxic" messages above,
+			// should have sent a pipe shutdown command back to the data source.
+			// Waiting here for message delivery to the mock data source collection 
+			// (since it's done asynchronously)
+			await Task.Delay(1000);
+
+			// Now we can retrieve it
+			var alertMessages = MockEndpoint.Receive("gasmeter", "gasmeter_123");
+
+			// It should be just one message, we can deserialize it back to expected type:
+			var receivedActionCommand = JsonConvert.DeserializeObject<ActionCommand>(alertMessages.FirstOrDefault());
+
+			// The final checks
+			Assert.AreEqual(receivedActionCommand.Description, "Shutdown the incoming gas pipe");
+			Assert.AreEqual(receivedActionCommand.Code, 100);
 
 			await mockEnvironment.ShutdownAsync();
 		}
