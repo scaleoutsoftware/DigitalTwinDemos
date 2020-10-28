@@ -89,8 +89,8 @@ namespace GasMeterTwin
                         dt.LimitStartTime = dt.LastPPMTime;
                         dt.NumEvents++;
                     }
-                    else if ((dt.LastPPMTime - dt.LimitStartTime) > TimeSpan.FromMinutes(GasSensor.MaxAllowedMinutes) ||
-                             dt.LastPPMReading >= GasSensor.SpikeAlertPPM)
+                    if ((dt.LastPPMTime - dt.LimitStartTime) > TimeSpan.FromMinutes(GasSensor.MaxAllowedMinutes) ||
+                         msg.PPMReading >= GasSensor.SpikeAlertPPM)
                     {
                         dt.AlarmSounded = true; // notify some personal
 
@@ -102,6 +102,8 @@ namespace GasMeterTwin
                         context.SendToDataSource(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(action)));
                     }
                 }
+                else
+                    dt.LimitExceeded = false;
             }
 
             return ProcessingResult.DoUpdate;
