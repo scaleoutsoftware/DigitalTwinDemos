@@ -23,7 +23,7 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.powergrid;
+package com.scaleoutsoftware.demo;
 
 public class Constants {
     public static String NODE_TYPE_INFRASTRUCTURE   = "infrastructure";

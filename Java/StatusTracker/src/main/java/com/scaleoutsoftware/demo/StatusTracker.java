@@ -23,7 +23,7 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.powergrid;
+package com.scaleoutsoftware.demo;
 
 import com.scaleoutsoftware.digitaltwin.core.DigitalTwinBase;
 
@@ -218,7 +218,7 @@ public class StatusTracker extends DigitalTwinBase {
         }
         incidentList.add(new IncidentReport(System.currentTimeMillis(), msg.getNodeCondition()));
         if(incidentList.size() == Constants.MAX_INCIDENT_LIST_SIZE) {
-            incidentList = incidentList.subList(Constants.INCIDENT_LIST_SUBLIST_FROM, Constants.INCIDENT_LIST_SUBLIST_TO);
+            incidentList.subList(Constants.INCIDENT_LIST_SUBLIST_FROM, Constants.INCIDENT_LIST_SUBLIST_TO).clear();
         }
     }
 

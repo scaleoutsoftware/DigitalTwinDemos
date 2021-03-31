@@ -23,7 +23,7 @@
  * HANDLING SYSTEM OR OTHERWISE, EVEN IF WE ARE EXPRESSLY ADVISED OF
  * THE POSSIBILITY OF SUCH DAMAGES.
  */
-package com.scaleoutsoftware.powergrid;
+package com.scaleoutsoftware.demo;
 
 import com.google.gson.Gson;
 import com.scaleoutsoftware.digitaltwin.core.DigitalTwinBase;
